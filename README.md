@@ -26,3 +26,21 @@ source $HOME/.cargo/env
 rustc --version
 cargo --version
 ```
+
+# Development Tools
+
+## format
+
+file formating :
+```
+rustfmt "file"
+```
+cargo project formating :
+```
+cargo fmt
+```
+
+## fix
+
+The rustfix tool can automatically fix compiler warnings that have a clear way to correct the problem that’s likely what you want.
+
