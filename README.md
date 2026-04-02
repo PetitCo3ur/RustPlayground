@@ -100,6 +100,23 @@ The following is a list of keywords currently in use, with their functionality d
 - where: Denote clauses that constrain a type.
 - while: Loop conditionally based on the result of an expression.
 
+## struct update syntax
+
+The syntax .. specifies that the remaining fields not explicitly set should have the same value as the fields in the given instance.
+
+```rust
+fn main() {
+    // --snip--
+
+    let user2 = User {
+        email: String::from("another@example.com"),
+        ..user1
+    };
+}
+```
+
+Note that the struct update syntax uses = like an assignment; it moves the data
+
 # Development Tools
 
 ## format
