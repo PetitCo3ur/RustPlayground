@@ -1,0 +1,44 @@
+# =====================================
+# Rust / Cargo
+# =====================================
+
+# Build artifacts (all crates in this repository)
+**/target/
+
+# Rustfmt backup files
+**/*.rs.bk
+
+# =====================================
+# Cargo.lock policy
+# =====================================
+# Keep Cargo.lock committed by default for applications/binaries.
+# If this repository is strictly a library workspace, you can ignore it
+# by uncommenting the line below.
+# Cargo.lock
+
+# =====================================
+# Editors / IDE
+# =====================================
+
+# Visual Studio Code (uncomment if you do not want shared workspace settings)
+# .vscode/
+
+# JetBrains IDEs
+.idea/
+
+# Vim / Neovim
+*.swp
+*.swo
+
+# =====================================
+# Operating system files
+# =====================================
+.DS_Store
+Thumbs.db
+
+# =====================================
+# Logs and temporary files
+# =====================================
+*.log
+*.tmp
+*.temp

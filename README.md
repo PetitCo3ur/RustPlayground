@@ -117,6 +117,57 @@ fn main() {
 
 Note that the struct update syntax uses = like an assignment; it moves the data
 
+## Control Flow with if let and let...else
+
+```rust
+    let config_max = Some(3u8);
+    match config_max {
+        Some(max) => println!("The maximum is configured to be {max}"),
+        _ => (),
+    }
+
+    // can be replace by 
+        let config_max = Some(3u8);
+    if let Some(max) = config_max {
+        println!("The maximum is configured to be {max}");
+    }
+```
+
+works also with else :
+
+```rust
+fn describe_state_quarter(coin: Coin) -> Option<String> {
+    let Coin::Quarter(state) = coin else {
+        return None;
+    };
+
+    if state.existed_in(1900) {
+        Some(format!("{state:?} is pretty old, for America!"))
+    } else {
+        Some(format!("{state:?} is relatively new."))
+    }
+}
+```
+
+## Packages, Crates, and Modules
+
+If a package contains src/main.rs and src/lib.rs, it has two crates: a binary and a library, both with the same name as the package. A package can have multiple binary crates by placing files in the src/bin directory: Each file will be a separate binary crate.
+
+### Modules Cheat Sheet
+
+- **Start from the crate root:** When compiling a crate, the compiler first looks in the crate root file (usually src/lib.rs for a library crate and src/main.rs for a binary crate) for code to compile.
+- **Declaring modules:** In the crate root file, you can declare new modules; say you declare a “garden” module with mod garden;. The compiler will look for the module’s code in these places:
+Inline, within curly brackets that replace the semicolon following mod garden
+In the file src/garden.rs
+In the file src/garden/mod.rs
+- **Declaring submodules:** In any file other than the crate root, you can declare submodules. For example, you might declare mod vegetables; in src/garden.rs. The compiler will look for the submodule’s code within the directory named for the parent module in these places:
+Inline, directly following mod vegetables, within curly brackets instead of the semicolon
+In the file src/garden/vegetables.rs
+In the file src/garden/vegetables/mod.rs
+- **Paths to code in modules:** Once a module is part of your crate, you can refer to code in that module from anywhere else in that same crate, as long as the privacy rules allow, using the path to the code. For example, an Asparagus type in the garden vegetables module would be found at crate::garden::vegetables::Asparagus.
+- **Private vs. public:** Code within a module is private from its parent modules by default. To make a module public, declare it with pub mod instead of mod. To make items within a public module public as well, use pub before their declarations.
+- **The use keyword:** Within a scope, the use keyword creates shortcuts to items to reduce repetition of long paths. In any scope that can refer to crate::garden::vegetables::Asparagus, you can create a shortcut with use crate::garden::vegetables::Asparagus;, and from then on you only need to write Asparagus to make use of that type in the scope.
+
 # Development Tools
 
 ## format
