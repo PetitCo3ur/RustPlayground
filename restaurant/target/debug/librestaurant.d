@@ -1,1 +1,0 @@
-/workspaces/RustPlayground/restaurant/target/debug/librestaurant.rlib: /workspaces/RustPlayground/restaurant/src/front_of_house/hosting.rs /workspaces/RustPlayground/restaurant/src/front_of_house.rs /workspaces/RustPlayground/restaurant/src/lib.rs
