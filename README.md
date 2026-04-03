@@ -1,204 +1,193 @@
 # RustPlayground
-Learning Rust
 
-# github Codespaces setup
+Notes personnelles pour apprendre Rust (book officiel), jusqu'a la fin du chapitre 8.
 
-installation :
-```
+Documentation de reference:
+- Rust Book: https://doc.rust-lang.org/book/
+- Chapitre Strings (8.2): https://doc.rust-lang.org/book/ch08-02-strings.html
+- std::collections: https://doc.rust-lang.org/std/collections/index.html
+
+## Installation rapide (Codespaces/Linux)
+
+```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-```
-reload le terminal 
-```
-source $HOME/.cargo/env
+source "$HOME/.cargo/env"
 rustc --version
 cargo --version
 ```
 
-# Basic compilation
+## Compiler sans Cargo (rare)
 
-```
+```bash
 rustc main.rs
 ./main
 ```
 
-# Cargo
+En pratique, on utilise presque toujours Cargo.
 
-## Command Cargo
+## Cargo: commandes utiles
 
-| Commande Cargo       | Fonction                                                    |
-| -------------------- | ----------------------------------------------------------- |
-| `cargo new mon_proj` | Crée un nouveau projet avec structure standard              |
-| `cargo build`        | Compile le projet (debug ou release)                        |
-| `cargo run`          | Compile **et** exécute le projet                            |
-| `cargo test`         | Lance les tests unitaires                                   |
-| `cargo check`        | Vérifie la compilation **sans générer** de binaire (rapide) |
-| `cargo add crate`    | Ajoute une dépendance dans `Cargo.toml`                     |
-| `cargo update`       | Met à jour les dépendances                                  |
-| `cargo clean`        | Supprime les fichiers compilés (`target/`)                  |
-| `cargo init`         | créé un environment cargo depuis un dossier                 |
-| `cargo build --release` | créé la version final de l éxécutable (optimisé)         |
+| Commande | A quoi ca sert |
+| --- | --- |
+| `cargo new mon_projet` | Cree un nouveau projet binaire |
+| `cargo new mon_projet --lib` | Cree une librairie |
+| `cargo init` | Initialise un projet Cargo dans un dossier existant |
+| `cargo build` | Compile en debug |
+| `cargo build --release` | Compile en release (optimise) |
+| `cargo run` | Compile puis execute |
+| `cargo check` | Verifie rapidement sans produire de binaire |
+| `cargo test` | Lance les tests |
+| `cargo fmt` | Formate le code |
+| `cargo clippy` | Lance les lints Clippy |
+| `cargo fix` | Applique certains correctifs automatiques |
+| `cargo doc --open` | Genere et ouvre la doc locale |
+| `cargo update` | Met a jour les versions dans `Cargo.lock` |
+| `cargo clean` | Supprime `target/` |
 
-## Configuration (Cargo.toml)
+### A retenir sur l'environnement Cargo
 
-**[package]** : section heading that indicates that the following statements are configuring a package.
+- `Cargo.toml` decrit le package (nom, version, edition, dependances).
+- `Cargo.lock` fige les versions exactes pour des builds reproductibles.
+- Le dossier `target/` contient les artefacts de compilation.
+- Profil par defaut: debug (plus rapide a compiler). Profil release: plus rapide a executer.
 
-**[dependencies]** : section to list any of your project’s dependencies. Packages of code are referred to as crates.
+Exemple minimal de `Cargo.toml`:
 
-**[bin]** : 
-- name : indicate the name of the binary
-- path : indicate the path of the source code
+```toml
+[package]
+name = "mon_projet"
+version = "0.1.0"
+edition = "2021"
 
-## Cargo.lock
+[dependencies]
+rand = "0.8"
+```
 
-Cargo.lock keeps track of the exact versions of dependencies in your project.
-Allow to avoid regression while updating versions.
-`cargo update` to bypass Cargo.lock versions.
+## Package, crate, modules
 
-# Rust Code
+- Un **package** = projet Cargo (defini par `Cargo.toml`).
+- Une **crate** = unite de compilation Rust.
+- `src/main.rs` -> crate binaire.
+- `src/lib.rs` -> crate librairie.
+- Un package peut contenir plusieurs binaires via `src/bin/*.rs`.
 
-## Keyword
+Regles modules (memo):
+- `mod foo;` cherche `foo.rs` ou `foo/mod.rs`.
+- `pub` rend un module/item visible hors du module parent.
+- `use` permet de raccourcir les chemins.
+- Chemins typiques: `crate::...`, `self::...`, `super::...`.
 
-The following is a list of keywords currently in use, with their functionality described.
+## Points Rust importants (chapitres 1 -> 8)
 
-- as: Perform primitive casting, disambiguate the specific trait containing an item, or rename items in use statements.
-- async: Return a Future instead of blocking the current thread.
-- await: Suspend execution until the result of a Future is ready.
-- break: Exit a loop immediately.
-- const: Define constant items or constant raw pointers.
-- continue: Continue to the next loop iteration.
-- crate: In a module path, refers to the crate root.
-- dyn: Dynamic dispatch to a trait object.
-- else: Fallback for if and if let control flow constructs.
-- enum: Define an enumeration.
-- extern: Link an external function or variable.
-- false: Boolean false literal.
-- fn: Define a function or the function pointer type.
-- for: Loop over items from an iterator, implement a trait, or specify a higher ranked lifetime.
-- if: Branch based on the result of a conditional expression.
-- impl: Implement inherent or trait functionality.
-- in: Part of for loop syntax.
-- let: Bind a variable.
-- loop: Loop unconditionally.
-- match: Match a value to patterns.
-- mod: Define a module.
-- move: Make a closure take ownership of all its captures.
-- mut: Denote mutability in references, raw pointers, or pattern bindings.
-- pub: Denote public visibility in struct fields, impl blocks, or modules.
-- ref: Bind by reference.
-- return: Return from function.
-- Self: A type alias for the type we are defining or implementing.
-- self: Method subject or current module.
-- static: Global variable or lifetime lasting the entire program execution.
-- struct: Define a structure.
-- super: Parent module of the current module.
-- trait: Define a trait.
-- true: Boolean true literal.
-- type: Define a type alias or associated type.
-- union: Define a union; is a keyword only when used in a union declaration.
-- unsafe: Denote unsafe code, functions, traits, or implementations.
-- use: Bring symbols into scope.
-- where: Denote clauses that constrain a type.
-- while: Loop conditionally based on the result of an expression.
+### 1. Variables et mutabilite
 
-## struct update syntax
+- Par defaut, une variable est immuable: `let x = 5;`.
+- `let mut x = 5;` pour autoriser la mutation.
+- Le *shadowing* permet de redefinir un nom: `let x = x + 1;`.
 
-The syntax .. specifies that the remaining fields not explicitly set should have the same value as the fields in the given instance.
+### 2. Ownership et Borrowing
+
+- Chaque valeur a un proprietaire unique.
+- Quand le proprietaire sort de portee, la valeur est liberee.
+- Un move transfere la propriete.
+- References:
+  - `&T` emprunt immutable (plusieurs autorises)
+  - `&mut T` emprunt mutable (un seul a la fois)
+- Pas de reference pendante: securite memoire a la compilation.
+
+### 3. Slices
+
+- `&str` est un slice UTF-8, souvent pour emprunter une chaine.
+- `String` est possedee et extensible.
+- Exemple: `let s: &str = &mon_string[0..4];`.
+
+### 4. Structs et enums
+
+- `struct` regroupe des champs nommes.
+- Syntaxe de mise a jour:
 
 ```rust
-fn main() {
-    // --snip--
+let user2 = User {
+    email: String::from("another@example.com"),
+    ..user1
+};
+```
 
-    let user2 = User {
-        email: String::from("another@example.com"),
-        ..user1
-    };
+Attention: `..user1` peut deplacer des champs (move).
+
+- `enum` modelise des variantes exclusives (ex: `Option<T>`, `Result<T, E>`).
+- `match` force a traiter tous les cas.
+- `if let` est pratique pour un seul motif.
+
+### 5. Collections (chapitre 8)
+
+### Vec<T>
+
+- Tableau dynamique en memoire contigue.
+- Operations typiques: `push`, indexation, `get`, iteration.
+- Eviter `v[i]` si risque d'index invalide; preferer `v.get(i)`.
+
+```rust
+let mut v = vec![1, 2, 3];
+v.push(4);
+if let Some(x) = v.get(2) {
+    println!("{x}");
 }
 ```
 
-Note that the struct update syntax uses = like an assignment; it moves the data
+### String
 
-## Control Flow with if let and let...else
-
-```rust
-    let config_max = Some(3u8);
-    match config_max {
-        Some(max) => println!("The maximum is configured to be {max}"),
-        _ => (),
-    }
-
-    // can be replace by 
-        let config_max = Some(3u8);
-    if let Some(max) = config_max {
-        println!("The maximum is configured to be {max}");
-    }
-```
-
-works also with else :
+- `String` est UTF-8, donc indexation directe interdite (`s[0]` impossible).
+- Trois vues utiles:
+  - bytes (`.as_bytes()`)
+  - scalar values (`.chars()`)
+  - grapheme clusters (via crate externe, ex: `unicode-segmentation`)
+- Concatener: `push_str`, `push`, `format!`.
 
 ```rust
-fn describe_state_quarter(coin: Coin) -> Option<String> {
-    let Coin::Quarter(state) = coin else {
-        return None;
-    };
-
-    if state.existed_in(1900) {
-        Some(format!("{state:?} is pretty old, for America!"))
-    } else {
-        Some(format!("{state:?} is relatively new."))
-    }
-}
+let mut s = String::from("Bon");
+s.push_str("jour");
+s.push('!');
+let msg = format!("{} {}", s, "Rust");
 ```
 
-## Packages, Crates, and Modules
+### HashMap<K, V>
 
-If a package contains src/main.rs and src/lib.rs, it has two crates: a binary and a library, both with the same name as the package. A package can have multiple binary crates by placing files in the src/bin directory: Each file will be a separate binary crate.
+- Associe une cle a une valeur.
+- Utiliser `entry(...).or_insert(...)` pour initialiser si absent.
+- Ownership important: inserer peut deplacer les valeurs possedees.
 
-### Modules Cheat Sheet
+```rust
+use std::collections::HashMap;
 
-- **Start from the crate root:** When compiling a crate, the compiler first looks in the crate root file (usually src/lib.rs for a library crate and src/main.rs for a binary crate) for code to compile.
-- **Declaring modules:** In the crate root file, you can declare new modules; say you declare a “garden” module with mod garden;. The compiler will look for the module’s code in these places:
-Inline, within curly brackets that replace the semicolon following mod garden
-In the file src/garden.rs
-In the file src/garden/mod.rs
-- **Declaring submodules:** In any file other than the crate root, you can declare submodules. For example, you might declare mod vegetables; in src/garden.rs. The compiler will look for the submodule’s code within the directory named for the parent module in these places:
-Inline, directly following mod vegetables, within curly brackets instead of the semicolon
-In the file src/garden/vegetables.rs
-In the file src/garden/vegetables/mod.rs
-- **Paths to code in modules:** Once a module is part of your crate, you can refer to code in that module from anywhere else in that same crate, as long as the privacy rules allow, using the path to the code. For example, an Asparagus type in the garden vegetables module would be found at crate::garden::vegetables::Asparagus.
-- **Private vs. public:** Code within a module is private from its parent modules by default. To make a module public, declare it with pub mod instead of mod. To make items within a public module public as well, use pub before their declarations.
-- **The use keyword:** Within a scope, the use keyword creates shortcuts to items to reduce repetition of long paths. In any scope that can refer to crate::garden::vegetables::Asparagus, you can create a shortcut with use crate::garden::vegetables::Asparagus;, and from then on you only need to write Asparagus to make use of that type in the scope.
-
-# Development Tools
-
-## format
-
-file formating :
+let mut scores = HashMap::new();
+scores.insert(String::from("Bleu"), 10);
+scores.entry(String::from("Jaune")).or_insert(50);
+scores.entry(String::from("Bleu")).or_insert(50);
 ```
-rustfmt "file"
-```
-cargo project formating :
-```
+
+### 6. Outils qualite
+
+```bash
 cargo fmt
+cargo clippy -- -D warnings
+cargo test
 ```
 
-## fix
+`cargo fix` est utile, mais relire le diff avant de valider.
 
-The rustfix tool can automatically fix compiler warnings that have a clear way to correct the problem that’s likely what you want.
+### 7. Bonnes pratiques personnelles
 
-changes need to be commited before using this tool. Can be bypassed using `--allow-dirty`
+- Preferer `cargo check` pendant le dev (plus rapide).
+- Ajouter des types explicites quand un code devient ambigu.
+- Lire les messages du compilateur jusqu'au bout: ils sont souvent tres pedagogiques.
+- Garder des exemples minimalistes dans des petits crates, comme dans ce repo.
 
-```
-cargo fix
-```
+## Lexique express
 
-## Quality / lints
-
-The Clippy tool is a collection of lints to analyze your code so that you can catch common mistakes and improve your Rust code.
-
-```
-cargo clippy
-```
-
-# Bonus
-
-**TOML** : Tom’s Obvious, Minimal Language
+- **crate**: unite de compilation Rust.
+- **package**: projet Cargo (avec `Cargo.toml`).
+- **module**: organisation du code a l'interieur d'une crate.
+- **ownership**: regles de possession memoire sans GC.
+- **borrow**: emprunt via reference.
+- **TOML**: Tom's Obvious, Minimal Language.

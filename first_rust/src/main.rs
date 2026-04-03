@@ -1,5 +1,10 @@
 fn main() {
-    let x = std::f64::consts::PI;
-    let r = 8.0;
-    println!("the area of the circle is {}", x * r * r);
+    let mut v = vec![1, 2, 3, 4, 5];
+
+    let first = &v[0];
+
+    println!("The first element is: {first}");
+
+    v.push(6);
+
 }
