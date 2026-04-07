@@ -219,6 +219,21 @@ Use a BinaryHeap when:
 - You want to store a bunch of elements, but only ever want to process the “biggest” or “most important” one at any given time.
 - You want a priority queue.
 
+## The ? Operator Shortcut
+
+The ? placed after a Result value is defined to work in almost the same way as the match expressions that we defined to handle the Result values
+
+```rust
+use std::fs::File;
+use std::io::{self, Read};
+
+fn read_username_from_file() -> Result<String, io::Error> {
+    let mut username_file = File::open("hello.txt")?;
+    let mut username = String::new();
+    username_file.read_to_string(&mut username)?;
+    Ok(username)
+}
+```
 
 # Development Tools
 
