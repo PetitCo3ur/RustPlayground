@@ -1,22 +1,21 @@
-struct Point<X1, Y1> {
-    x: X1,
-    y: Y1,
-}
-
-impl<X1, Y1> Point<X1, Y1> {
-    fn mixup<X2, Y2>(self, other: Point<X2, Y2>) -> Point<X1, Y2> {
-        Point {
-            x: self.x,
-            y: other.y,
-        }
-    }
-}
-
 fn main() {
-    let p1 = Point { x: 5, y: 10.4 };
-    let p2 = Point { x: "Hello", y: 'c' };
+    let string1 = String::from("abcd");
+    let string2 = "xyz";
 
-    let p3 = p1.mixup(p2);
+    let result = longest_with_an_announcement(string1.as_str(), string2, "Comparing two strings");
+    println!("The longest string is {}", result);
+}
 
-    println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+use std::fmt::Display;
+
+fn longest_with_an_announcement<'a, T>(
+    x: &'a str,
+    y: &'a str,
+    ann: T,
+) -> &'a str
+where
+    T: Display,
+{
+    println!("Announcement! {ann}");
+    if x.len() > y.len() { x } else { y }
 }

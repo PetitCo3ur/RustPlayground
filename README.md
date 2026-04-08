@@ -61,6 +61,7 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8"
+ma_lib = { path = "../ma_lib" } 
 ```
 
 ## Package, crate, modules
