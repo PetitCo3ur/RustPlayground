@@ -1,20 +1,9 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+// Modules d'exercices pour les chapitres 1-11 du Rust Book
+#![allow(unused_variables)]
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-
-    #[test]
-    #[ignore]
-    fn expensive_test() {
-        // code that takes an hour to run
-    }
-}
+pub mod basics;
+pub mod control_flow;
+pub mod collections;
+pub mod error_handling;
+pub mod traits_generics;
+pub mod text_processing;

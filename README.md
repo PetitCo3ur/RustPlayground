@@ -1,6 +1,6 @@
 # RustPlayground
 
-Notes personnelles pour apprendre Rust (book officiel), jusqu'a la fin du chapitre 8.
+Notes personnelles pour apprendre Rust (book officiel), jusqu'a la fin du chapitre 11.
 
 Documentation de reference:
 - Rust Book: https://doc.rust-lang.org/book/
