@@ -10,27 +10,31 @@ pub struct TextAnalyzer {
 impl TextAnalyzer {
     /// Crée un nouveau TextAnalyzer
     pub fn new(text: &str) -> Self {
-        todo!()
+        Self { text: text.to_string() }
     }
 
     /// Compte le nombre de lignes
     pub fn line_count(&self) -> usize {
-        todo!()
+        self.text.lines().count()
     }
 
     /// Compte le nombre de mots
     pub fn word_count(&self) -> usize {
-        todo!()
+        self.text.split_whitespace().count()
     }
 
     /// Compte le nombre de caractères (sans espaces)
     pub fn char_count(&self) -> usize {
-        todo!()
+        // self.text.split_whitespace().collect::<Vec<&str>>().join("").chars().count()
+        self.text.chars().filter(|c| !c.is_whitespace()).count()
     }
 
     /// Compte le nombre de voyelles
     pub fn vowel_count(&self) -> usize {
-        todo!()
+        self.text
+            .chars()
+            .filter(|&c| matches!(c.to_lowercase().next(), Some('a' | 'e' | 'i' | 'o' | 'u' | 'y')))
+            .count()
     }
 
     /// Compte le nombre de consonnes

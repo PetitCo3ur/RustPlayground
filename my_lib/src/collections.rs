@@ -1,7 +1,7 @@
 //! Exercices sur les collections (Chapitre 8)
 //! - Vec, String, HashMap
 
-use std::collections::HashMap;
+use std::{char, collections::HashMap};
 
 /// Retourne la somme de tous les éléments d'un vecteur
 /// # Exemple
@@ -50,12 +50,13 @@ pub fn min_max(vec: &[i32]) -> Option<(i32, i32)> {
 /// # Exemple
 /// assert_eq!(duplicate_elements(&[1, 2, 3]), vec![1, 1, 2, 2, 3, 3]);
 pub fn duplicate_elements(vec: &[i32]) -> Vec<i32> {
-    let mut res = Vec::new();
-    for &item in vec {
-        res.push(item);
-        res.push(item);
-    }
-    res
+    // let mut res = Vec::new();
+    // for &item in vec {
+    //     res.push(item);
+    //     res.push(item);
+    // }
+    // res
+    vec.iter().flat_map(|&x| [x, x]).collect()
 }
 
 /// Retourne un nouveau vecteur avec seulement les nombres pairs
@@ -69,12 +70,13 @@ pub fn filter_even(vec: &[i32]) -> Vec<i32> {
 /// # Exemple
 /// assert_eq!(filter_odd(&[1, 2, 3, 4, 5]), vec![1, 3, 5]);
 pub fn filter_odd(vec: &[i32]) -> Vec<i32> {
-    let mut res = Vec::new();
+    // let mut res = Vec::new();
 
-    for &item in vec {
-        if item % 2 == 1 { res.push(item)}
-    }
-    res
+    // for &item in vec {
+    //     if item % 2 == 1 { res.push(item)}
+    // }
+    // res
+    vec.iter().copied().filter(|&x| x % 2 == 1).collect()
 }
 
 /// Compte les occurrences de chaque élément dans une HashMap
@@ -96,14 +98,20 @@ pub fn count_occurrences(vec: &[i32]) -> HashMap<i32, u32> {
 /// # Exemple
 /// assert_eq!(unique_elements(&[1, 2, 2, 3, 3, 3]), vec![1, 2, 3]);
 pub fn unique_elements(vec: &[i32]) -> Vec<i32> {
-    let mut res = Vec::new();
+    // let mut res = Vec::new();
 
-    for &item in vec {
-        if !res.contains(&item) {
-            res.push(item);
-        }
-    }
+    // for &item in vec {
+    //     if !res.contains(&item) {
+    //         res.push(item);
+    //     }
+    // }
+
+    // let mut set: HashSet<i32> = vec.iter().copied().collect();
+    // let mut res: Vec<i32> = set.drain().collect();
+
+    let mut res: Vec<i32> = vec.iter().copied().collect();
     res.sort();
+    res.dedup();
     res
 }
 
@@ -111,7 +119,12 @@ pub fn unique_elements(vec: &[i32]) -> Vec<i32> {
 /// # Exemple
 /// assert_eq!(reverse_vector(&[1, 2, 3]), vec![3, 2, 1]);
 pub fn reverse_vector(vec: &[i32]) -> Vec<i32> {
-    todo!()
+    // let mut res = Vec::new();
+    // for &item in vec.iter().rev() {
+    //     res.push(item);
+    // }
+    // res
+    vec.iter().copied().rev().collect()
 }
 
 /// Compte la fréquence de chaque mot (HashMap<&str, u32>)
@@ -121,21 +134,25 @@ pub fn reverse_vector(vec: &[i32]) -> Vec<i32> {
 /// let result = word_frequency(text);
 /// assert_eq!(result.get("bonjour"), Some(&2));
 pub fn word_frequency(text: &str) -> HashMap<&str, u32> {
-    todo!()
+    let mut res: HashMap<&str, u32> = HashMap::new();
+    for word in text.split_whitespace() {
+        *res.entry(word).or_insert(0) += 1;
+    }
+    res
 }
 
 /// Convertit une chaîne en majuscules
 /// # Exemple
 /// assert_eq!(to_uppercase("hello"), "HELLO");
 pub fn to_uppercase(text: &str) -> String {
-    todo!()
+    text.to_uppercase()
 }
 
 /// Convertit une chaîne en minuscules
 /// # Exemple
 /// assert_eq!(to_lowercase("HELLO"), "hello");
 pub fn to_lowercase(text: &str) -> String {
-    todo!()
+    text.to_lowercase()
 }
 
 /// Compte le nombre de caractères (pas en bytes), excluant les espaces
@@ -143,21 +160,32 @@ pub fn to_lowercase(text: &str) -> String {
 /// assert_eq!(char_count("hello"), 5);
 /// assert_eq!(char_count("café"), 4);
 pub fn char_count(text: &str) -> usize {
-    todo!()
+    text.chars().count()
 }
 
 /// Retourne les mots séparés par les espaces
 /// # Exemple
 /// assert_eq!(extract_words("hello world rust"), vec!["hello", "world", "rust"]);
 pub fn extract_words(text: &str) -> Vec<&str> {
-    todo!()
+    // let mut res = Vec::new();
+    // for word in text.split_whitespace() {
+    //     res.push(word);
+    // }
+    // res
+    text.split_whitespace().collect()
 }
 
 /// Inverse l'ordre des mots
 /// # Exemple
 /// assert_eq!(reverse_words("hello world rust"), "rust world hello");
 pub fn reverse_words(text: &str) -> String {
-    todo!()
+    // let mut res = String::new();
+    // for word in text.split_whitespace().rev() {
+    //     res.push_str(&(word.to_owned() + " "));
+    // }
+    
+    // res.trim().to_string()
+    text.split_whitespace().rev().collect::<Vec<&str>>().join(" ")
 }
 
 /// Retourne la première lettre en majuscule, le reste inchangé
@@ -165,7 +193,18 @@ pub fn reverse_words(text: &str) -> String {
 /// assert_eq!(capitalize("hello"), "Hello");
 /// assert_eq!(capitalize(""), "");
 pub fn capitalize(text: &str) -> String {
-    todo!()
+    // if text.is_empty() {
+    //     return String::new();
+    // }
+    // let mut chars = text.chars();
+    // let up = chars.next().unwrap().to_ascii_uppercase().to_string();
+    // let rest: String = chars.collect();
+    // up + &rest
+    let mut chars = text.chars();
+    match chars.next() {
+        None => String::new(),
+        Some(first) => first.to_uppercase().to_string() + chars.as_str(),
+    }
 }
 
 

@@ -1,7 +1,7 @@
 //! Exercices sur les traits et génériques (Chapitre 10)
 //! - Traits, types génériques, implémentations
 
-use std::fmt;
+use std::{fmt, i32};
 
 /// Trait pour les formes géométriques
 pub trait Shape {
@@ -25,11 +25,11 @@ pub struct Rectangle {
 
 impl Shape for Rectangle {
     fn area(&self) -> f64 {
-        todo!()
+        self.width * self.height
     }
 
     fn perimeter(&self) -> f64 {
-        todo!()
+        2.0 * (self.width + self.height)
     }
 }
 
@@ -41,11 +41,11 @@ pub struct Circle {
 
 impl Shape for Circle {
     fn area(&self) -> f64 {
-        todo!()
+        std::f64::consts::PI * self.radius * self.radius
     }
 
     fn perimeter(&self) -> f64 {
-        todo!()
+        2.0 * std::f64::consts::PI * self.radius
     }
 }
 
@@ -68,7 +68,7 @@ pub struct SimpleContainer<T> {
 impl<T> SimpleContainer<T> {
     /// Crée un nouveau conteneur vide
     pub fn new() -> Self {
-        todo!()
+        Self { items: Vec::new() }
     }
 }
 
@@ -131,14 +131,14 @@ impl Comparable for String {
 pub trait Summable {
     fn sum_all(&self) -> i64;
     fn average(&self) -> f64 {
-        todo!()
+        self.sum_all() as f64 / self.count_items() as f64
     }
     fn count_items(&self) -> usize;
 }
 
 impl Summable for Vec<i32> {
     fn sum_all(&self) -> i64 {
-        todo!()
+        self.iter().sum::<i32>().into()
     }
 
     fn count_items(&self) -> usize {
@@ -148,7 +148,16 @@ impl Summable for Vec<i32> {
 
 /// Retourne le maximum générique avec un trait bound
 pub fn find_max<T: Comparable + Clone>(items: &[T]) -> Option<T> {
-    todo!()
+    if items.is_empty() {
+        return None;
+    }
+    let mut max = items[0].clone();
+    for item in items.iter().skip(1) {
+        if item.is_greater_than(&max) {
+            max = item.clone();
+        }
+    }
+    Some(max)
 }
 
 /// Pair générique
@@ -164,7 +173,7 @@ impl<T> Pair<T> {
     /// let pair = Pair::new(1, 2);
     /// assert_eq!(pair.first, 1);
     pub fn new(first: T, second: T) -> Self {
-        todo!()
+        Self { first, second }
     }
 
     /// Échange les deux valeurs et retourne la Pair échangée
@@ -172,7 +181,7 @@ impl<T> Pair<T> {
     /// let pair = Pair::new(1, 2).swap();
     /// assert_eq!(pair.first, 2);
     pub fn swap(self) -> Self {
-        todo!()
+        Self { first: self.second, second: self.first }
     }
 }
 

@@ -1,0 +1,114 @@
+{
+  "editor.tokenColorCustomizations": {
+    "[Default Dark Modern]": {
+      "comments": "#669900",
+      "strings": "#ce9178",
+      "numbers": "#b5cea8",
+      "keywords": "#569cd6",
+      "types": "#4ec9b0",
+      "functions": "#dcdcaa",
+      "variables": "#d4d4d4",
+    //   "operators": "#d4d4d4",
+      "textMateRules": [
+        {
+          "scope": "comment.line.double-slash.rs",
+          "settings": {
+            "foreground": "#6a9955",
+            "fontStyle": "italic"
+          }
+        },
+        {
+          "scope": "comment.block.rs",
+          "settings": {
+            "foreground": "#6a9955"
+          }
+        },
+        {
+          "scope": "string.quoted.double.rs",
+          "settings": {
+            "foreground": "#ce9178"
+          }
+        },
+        {
+          "scope": [
+            "constant.character.escape.rs",
+            "constant.numeric.integer.rs",
+            "constant.numeric.float.rs"
+          ],
+          "settings": {
+            "foreground": "#b5cea8"
+          }
+        },
+        {
+          "scope": [
+            "keyword.control.rust",
+            "keyword.control.match.rust",
+            "keyword.other.rust"
+          ],
+          "settings": {
+            "foreground": "#569cd6",
+            "fontStyle": "bold"
+          }
+        },
+        {
+          "scope": "storage.type.rust",
+          "settings": {
+            "foreground": "#4ec9b0"
+          }
+        },
+        {
+          "scope": [
+            "entity.name.function.rust",
+            "support.function.rust"
+          ],
+          "settings": {
+            "foreground": "#dcdcaa"
+          }
+        },
+        {
+          "scope": "variable.other.rust",
+          "settings": {
+            "foreground": "#d4d4d4"
+          }
+        },
+        {
+          "scope": [
+            "punctuation.brackets.curly.rust",
+            "punctuation.brackets.round.rust",
+            "punctuation.brackets.square.rust"
+          ],
+          "settings": {
+            "foreground": "#d4d4d4"
+          }
+        },
+        {
+          "scope": "entity.name.type.rust",
+          "settings": {
+            "foreground": "#4ec9b0",
+            "fontStyle": "bold"
+          }
+        },
+        {
+          "scope": "support.constant.rust",
+          "settings": {
+            "foreground": "#d7ba7d"
+          }
+        },
+        {
+          "scope": "variable.language.self.rust",
+          "settings": {
+            "foreground": "#569cd6",
+            "fontStyle": "bold"
+          }
+        },
+        {
+          "scope": "storage.modifier.rust",
+          "settings": {
+            "foreground": "#c586c0"
+          }
+        }
+      ]
+    }
+  },
+  "rust-analyzer.checkOnSave.command": "clippy"
+}
