@@ -39,53 +39,84 @@ impl TextAnalyzer {
 
     /// Compte le nombre de consonnes
     pub fn consonant_count(&self) -> usize {
-        todo!()
+        self.text
+            .chars()
+            .filter(|&c| c.is_alphabetic() && !matches!(c.to_lowercase().next(), Some('a' | 'e' | 'i' | 'o' | 'u' | 'y')))
+            .count()
     }
 
     /// Retourne les lignes
     pub fn lines(&self) -> Vec<&str> {
-        todo!()
+        self.text.lines().collect()
     }
 
     /// Retourne les paragraphes (séparés par une ligne vide)
     pub fn paragraphs(&self) -> Vec<Vec<&str>> {
-        todo!()
+        self.text.split("\n\n").map(|p| p.lines().collect()).collect()
     }
 }
 
 /// Vérifie si une chaîne est un palindrome
+// pub fn is_palindrome(text: &str) -> bool {
+//     let cleaned: String = text.chars().filter(|c| c.is_alphanumeric()).map(|c| c.to_ascii_lowercase()).collect();
+//     cleaned == cleaned.chars().rev().collect::<String>()
+// }
 pub fn is_palindrome(text: &str) -> bool {
-    todo!()
+    let chars = text.chars()
+        .filter(|c| c.is_alphanumeric())
+        .map(|c| c.to_ascii_lowercase());
+
+    chars.clone().eq(chars.rev())
 }
 
 /// Remplace les caractères spécifiques
+// pub fn replace_multiple(text: &str, replacements: &[(&str, &str)]) -> String {
+//     let mut res = text.to_string();
+//     for &(from, to) in replacements {
+//         res = res.replace(from, to);
+//     }
+//     res
+// }
 pub fn replace_multiple(text: &str, replacements: &[(&str, &str)]) -> String {
-    todo!()
+    replacements.iter().fold(text.to_string(), |acc, (from, to)| {
+        acc.replace(from, to)
+    })
 }
 
 /// Extrait les initiales
 pub fn extract_initials(text: &str) -> String {
-    todo!()
+    text.split_whitespace()
+        .filter_map(|word| word.chars().next())
+        .map(|c| c.to_ascii_uppercase().to_string())
+        .collect::<Vec<String>>()
+        .join(".")
 }
 
 /// Compte les phrases (finissant par . ! ?)
 pub fn sentence_count(text: &str) -> usize {
-    todo!()
+    text.matches(['.', '!', '?']).count()
 }
 
 /// Trouvé l'indice de la première occurrence (case-insensitive)
 pub fn find_case_insensitive(text: &str, needle: &str) -> Option<usize> {
-    todo!()
+    text.to_lowercase().find(&needle.to_lowercase())
 }
 
 /// Compte les occurrences d'une sous-chaîne
 pub fn count_substring(text: &str, substring: &str) -> usize {
-    todo!()
+    text.matches(substring).count()
 }
 
 /// Centre le texte dans une largeur donnée
 pub fn center_text(text: &str, width: usize) -> String {
-    todo!()
+    let len = text.chars().count();
+    if len >= width {
+        return text.to_string();
+    }
+    let padding = width - len;
+    let left_pad = padding / 2;
+    let right_pad = padding - left_pad;
+    format!("{}{}{}", " ".repeat(left_pad), text, " ".repeat(right_pad))
 }
 
 /// Formate un texte en colonnes

@@ -1,7 +1,7 @@
 //! Exercices sur les collections (Chapitre 8)
 //! - Vec, String, HashMap
 
-use std::{char, collections::HashMap};
+use std::{collections::HashMap};
 
 /// Retourne la somme de tous les éléments d'un vecteur
 /// # Exemple
@@ -19,7 +19,7 @@ pub fn sum_vector(vec: &[i32]) -> i32 {
 /// # Exemple
 /// assert_eq!(average(&[2, 4, 6]), 4.0);
 pub fn average(vec: &[i32]) -> f64 {
-    if vec.len() == 0 { return 0.0; }
+    if vec.is_empty() { return 0.0; }
 
     // let mut result:f64 = 0.0;
     // for item in vec {
@@ -109,7 +109,7 @@ pub fn unique_elements(vec: &[i32]) -> Vec<i32> {
     // let mut set: HashSet<i32> = vec.iter().copied().collect();
     // let mut res: Vec<i32> = set.drain().collect();
 
-    let mut res: Vec<i32> = vec.iter().copied().collect();
+    let mut res: Vec<i32> = vec.to_vec();
     res.sort();
     res.dedup();
     res

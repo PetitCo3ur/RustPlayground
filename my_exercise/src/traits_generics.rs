@@ -1,7 +1,7 @@
 //! Exercices sur les traits et génériques (Chapitre 10)
 //! - Traits, types génériques, implémentations
 
-use std::{fmt, i32};
+use std::{fmt};
 
 /// Trait pour les formes géométriques
 pub trait Shape {
