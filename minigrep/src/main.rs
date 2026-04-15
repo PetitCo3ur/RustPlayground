@@ -1,14 +1,53 @@
-use std::env::args;
+use std::env::{self, args};
+use std::error::Error;
+use std::process;
+
+use minigrep::search;
 
 fn main() {
     let args: Vec<String> = args().collect();
 
-    let query = &args[1];
-    let filename = &args[2];
+    let config = Config::build(&args).unwrap_or_else(|err| {
+        eprintln!("Problem parsing arguments: {}", err);
+        process::exit(1);
+    });
 
-    println!("Searching for {query} in {filename}");
+    if let Err(e) = run(config) {
+        eprintln!("Error running minigrep: {}", e);
+        process::exit(1);
+    }
+}
 
-    let content = std::fs::read_to_string(filename).expect("Could not read the file");
-    
-    println!("With text:\n{content}");
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let content = std::fs::read_to_string(config.filename)?;
+
+    let results = if config.ignore_case {
+        minigrep::search_case_insensitive(&config.query, &content)
+    } else {
+        search(&config.query, &content)
+    };
+
+    for line in results {
+        println!("{}", line);
+    }
+    Ok(())
+}
+
+struct Config {
+    query: String,
+    filename: String,
+    ignore_case: bool,
+}
+
+impl Config {
+    fn build(args: &[String]) -> Result<Config, &'static str> {
+        if args.len() < 3 {
+            return Err("Not enough arguments");
+        }
+        let query = args[1].clone();
+        let filename = args[2].clone();
+        let ignore_case = env::var("IGNORE_CASE").is_ok();
+
+        Ok(Config { query, filename, ignore_case })
+    }
 }
