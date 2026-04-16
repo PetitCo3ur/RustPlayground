@@ -5,9 +5,7 @@ use std::process;
 use minigrep::search;
 
 fn main() {
-    let args: Vec<String> = args().collect();
-
-    let config = Config::build(&args).unwrap_or_else(|err| {
+    let config = Config::build(args()).unwrap_or_else(|err| {
         eprintln!("Problem parsing arguments: {}", err);
         process::exit(1);
     });
@@ -22,9 +20,9 @@ fn run(config: Config) -> Result<(), Box<dyn Error>> {
     let content = std::fs::read_to_string(config.filename)?;
 
     let results = if config.ignore_case {
-        minigrep::search_case_insensitive(&config.query, &content)
+        Box::new(minigrep::search_case_insensitive(&config.query, &content)) as Box<dyn Iterator<Item = &str>>
     } else {
-        search(&config.query, &content)
+        Box::new(search(&config.query, &content)) as Box<dyn Iterator<Item = &str>>
     };
 
     for line in results {
@@ -40,12 +38,23 @@ struct Config {
 }
 
 impl Config {
-    fn build(args: &[String]) -> Result<Config, &'static str> {
+    fn build(args: impl Iterator<Item = String>) -> Result<Config, &'static str> {
+        let args = args.collect::<Vec<String>>();
+        
         if args.len() < 3 {
             return Err("Not enough arguments");
         }
-        let query = args[1].clone();
-        let filename = args[2].clone();
+
+        let query = match args.get(1) {
+            Some(arg) => arg.clone(),
+            None => return Err("Didn't get a query string"),
+        };
+
+        let filename = match args.get(2) {
+            Some(arg) => arg.clone(),
+            None => return Err("Didn't get a filename"),
+        };
+
         let ignore_case = env::var("IGNORE_CASE").is_ok();
 
         Ok(Config { query, filename, ignore_case })
