@@ -4,8 +4,10 @@ Notes personnelles pour apprendre Rust (book officiel), jusqu'a la fin du chapit
 
 Documentation de reference:
 - Rust Book: https://doc.rust-lang.org/book/
+- The Rust Reference : https://doc.rust-lang.org/reference/index.html
 - Chapitre Strings (8.2): https://doc.rust-lang.org/book/ch08-02-strings.html
 - std::collections: https://doc.rust-lang.org/std/collections/index.html
+- the Rustonomicon : https://doc.rust-lang.org/nomicon/index.html
 
 ## Installation rapide (Codespaces/Linux)
 

@@ -110,5 +110,13 @@
       ]
     }
   },
+  "rust-analyzer.linkedProjects": [
+    "first_rust/Cargo.toml",
+    "guessing_game/Cargo.toml",
+    "hello-async/Cargo.toml",
+    "minigrep/Cargo.toml",
+    "my_exercise/Cargo.toml",
+    "rustlings/Cargo.toml"
+  ],
   "rust-analyzer.checkOnSave.command": "clippy"
 }
